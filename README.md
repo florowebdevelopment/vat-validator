@@ -3,6 +3,7 @@
 <a href="https://packagist.org/packages/florowebdevelopment/vat-validator"><img src="https://poser.pugx.org/florowebdevelopment/vat-validator/d/total.svg" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/florowebdevelopment/vat-validator"><img src="https://poser.pugx.org/florowebdevelopment/vat-validator/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/florowebdevelopment/vat-validator"><img src="https://poser.pugx.org/florowebdevelopment/vat-validator/license.svg" alt="License"></a>
+<img src="https://github.styleci.io/repos/177171886/shield?style=flat" alt="StyleCI">
 
 This library validate VAT numbers by using regular expressions and the VIES (VAT Information Exchange System) service.
 
