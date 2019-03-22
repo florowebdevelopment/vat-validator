@@ -2,8 +2,6 @@
 
 namespace Florowebdevelopment\VatValidator;
 
-use Florowebdevelopment\VatValidator\Vies;
-
 class VatValidator
 {
     protected $aMetaData = [];
@@ -74,11 +72,13 @@ class VatValidator
 
         if (!preg_match($sPattern, $sVatNumber)) {
             $this->setValid(false);
+
             return false;
         }
 
         if (!self::check($sVatNumber)) {
             $this->setValid(false);
+
             return false;
         }
 
@@ -86,12 +86,13 @@ class VatValidator
 
         if (!$oVies->validate($sVatNumber)) {
             $this->setValid(false);
+
             return false;
         }
 
         $aMetaData = [
-            'name' => $oVies->getName(),
-            'address' => $oVies->getAddress()
+            'name'    => $oVies->getName(),
+            'address' => $oVies->getAddress(),
         ];
 
         $this->setMetaData($aMetaData);
@@ -112,7 +113,7 @@ class VatValidator
     {
         $sCountryCode = substr($sVatNumber, 0, 2);
 
-        switch ($sCountryCode){
+        switch ($sCountryCode) {
             case 'AT': // Oostenrijk
                 return (bool) preg_match('/^(AT)U(\d{8})$/', $sVatNumber);
             case 'BE': // België
@@ -194,5 +195,4 @@ class VatValidator
                 return false;
         }
     }
-
 }

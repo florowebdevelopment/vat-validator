@@ -19,11 +19,11 @@ class Vies
      */
     public function __construct()
     {
-        ini_set("default_socket_timeout", 15);
+        ini_set('default_socket_timeout', 15);
 
         $oSoapClient = new SoapClient(self::WSDL_URL, [
             'connection_timeout' => 15,
-            'exceptions' => true
+            'exceptions'         => true,
         ]);
 
         $this->setSoapClient($oSoapClient);
@@ -148,11 +148,12 @@ class Vies
 
         $oResponse = $oSoapClient->checkVat([
             'countryCode' => substr($sVatNumber, 0, 2),
-            'vatNumber'  => substr($sVatNumber, 2, strlen($sVatNumber) - 2)
+            'vatNumber'   => substr($sVatNumber, 2, strlen($sVatNumber) - 2),
         ]);
 
         if (!$oResponse->valid) {
             $this->setValid(false);
+
             return false;
         }
 
