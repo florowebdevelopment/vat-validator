@@ -66,7 +66,7 @@ class VatValidator
      */
     public function validate(string $sVatNumber): bool
     {
-        $sPattern = '/^(AT|BE|BG|CY|CZ|DE|DK|EE|ES|FI|FR|GB|GR|HR|HU|IE|IT|LT|LU|LV|MT|NL|PL|PT|RO|SE|SI|SK)[A-Z0-9]{6,20}$/';
+        $sPattern = '/^(AT|BE|BG|CHE|CY|CZ|DE|DK|EE|EL|ES|EU|FI|FR|GB|GR|HR|HU|IE|IT|LT|LU|LV|MT|NL|NO|PL|PT|RO|RS|SE|SI|SK)[A-Z0-9]{6,20}$/';
 
         $sVatNumber = strtoupper($sVatNumber);
 
@@ -185,12 +185,12 @@ class VatValidator
                 return (bool) preg_match('/^(RO)([1-9]\d{1,9})$/', $sVatNumber);
             case 'RS': // Servië
                 return (bool) preg_match('/^(RS)(\d{9})$/', $sVatNumber);
+            case 'SE': // Zweden
+                return (bool) preg_match('/^(SE)(\d{10}01)$/', $sVatNumber);
             case 'SI': // Slovenië
                 return (bool) preg_match('/^(SI)([1-9]\d{7})$/', $sVatNumber);
             case 'SK': // Slowakije
                 return (bool) preg_match('/^(SK)([1-9]\d[(2-4)|(6-9)]\d{7})$/', $sVatNumber);
-            case 'SE': // Zweden
-                return (bool) preg_match('/^(SE)(\d{10}01)$/', $sVatNumber);
             default:
                 return false;
         }
