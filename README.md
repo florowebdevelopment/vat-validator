@@ -16,7 +16,7 @@ composer require florowebdevelopment/vat-validator
 ## Usage
 
 ```php
-use Florowebdevelopment\VatValidator;
+use Florowebdevelopment\VatValidator\VatValidator;
 ```
 
 ```
@@ -34,6 +34,14 @@ if ($oVatValidator->isValid()) {
     )
     */
 }
+```
+
+# Strict (optional)
+
+When strict is set to FALSE, the VAT number validation returns TRUE if the VIES service is not available (CURL timeout).
+
+```
+$oVatValidator->setStrict(false); // default = true
 ```
 
 ## Comments

@@ -2,14 +2,36 @@
 
 namespace Florowebdevelopment\VatValidator;
 
-use SoapClient;
+use Florowebdevelopment\VatValidator\Vies\Client as ViesClient;
+use Florowebdevelopment\VatValidator\Vies\Exceptions\Timeout as ViesTimeoutException;
+use SoapFault;
 use stdClass;
 
 class Vies
 {
-    protected $oSoapClient = null;
+    /**
+     * @var ViesClient $oViesClient
+     */
+    protected $oViesClient = null;
+
+    /**
+     * @var bool $bValid
+     */
     protected $bValid = false;
+
+    /**
+     * @var bool $bStrict
+     */
+    protected $bStrict = true;
+
+    /**
+     * @var string $sName
+     */
     protected $sName = '';
+
+    /**
+     * @var string $sAddress
+     */
     protected $sAddress = '';
 
     const WSDL_URL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
@@ -19,34 +41,35 @@ class Vies
      */
     public function __construct()
     {
-        ini_set('default_socket_timeout', 15);
+        ini_set('default_socket_timeout', 3);
+        ini_set('max_execution_time', 30);
 
-        $oSoapClient = new SoapClient(self::WSDL_URL, [
-            'connection_timeout' => 15,
+        $oViesClient = new ViesClient(self::WSDL_URL, [
+            'connection_timeout' => 3,
             'exceptions'         => true,
         ]);
 
-        $this->setSoapClient($oSoapClient);
+        $this->setViesClient($oViesClient);
     }
 
     /**
-     * Get Soap Client.
+     * Get Vies Client.
      *
-     * @return SoapClient $this->oSoapClient;
+     * @return ViesClient $this->oViesClient;
      */
-    private function getSoapClient(): SoapClient
+    private function getViesClient(): ViesClient
     {
-        return $this->oSoapClient;
+        return $this->oViesClient;
     }
 
     /**
-     * Set Soap Client.
+     * Set Vies Client.
      *
-     * @param $oSoapClient
+     * @param ViesClient $oViesClient
      */
-    private function setSoapClient(SoapClient $oSoapClient): void
+    private function setViesClient(ViesClient $oViesClient): void
     {
-        $this->oSoapClient = $oSoapClient;
+        $this->oViesClient = $oViesClient;
     }
 
     /**
@@ -110,6 +133,26 @@ class Vies
     }
 
     /**
+     * Get Strict.
+     *
+     * @return bool $this->bStrict;
+     */
+    public function getStrict(): bool
+    {
+        return $this->bStrict;
+    }
+
+    /**
+     * Set Strict.
+     *
+     * @param bool $bStrict
+     */
+    public function setStrict(bool $bStrict): void
+    {
+        $this->bStrict = $bStrict;
+    }
+
+    /**
      * Is Valid.
      *
      * @return bool $bValid
@@ -144,24 +187,35 @@ class Vies
      */
     private function checkVat($sVatNumber): bool
     {
-        $oSoapClient = $this->getSoapClient();
+        try {
+            $oViesClient = $this->getViesClient();
 
-        $oResponse = $oSoapClient->checkVat([
-            'countryCode' => substr($sVatNumber, 0, 2),
-            'vatNumber'   => substr($sVatNumber, 2, strlen($sVatNumber) - 2),
-        ]);
+            $oResponse = $oViesClient->checkVat([
+                'countryCode' => substr($sVatNumber, 0, 2),
+                'vatNumber' => substr($sVatNumber, 2, strlen($sVatNumber) - 2),
+            ]);
 
-        if (!$oResponse->valid) {
+            if (!$oResponse->valid) {
+                $this->setValid(false);
+                return false;
+            }
+
+            $this->setValid(true);
+
+            $this->checkVatResponse($oResponse);
+
+            return true;
+        } catch (ViesTimeoutException $e) {
+            if ($this->getStrict() == false) {
+                $this->setValid(true);
+                return true;
+            }
+
             $this->setValid(false);
-
             return false;
+        } catch (SoapFault $e) {
+            throw new SoapFault($e);
         }
-
-        $this->setValid(true);
-
-        $this->checkVatResponse($oResponse);
-
-        return true;
     }
 
     /**
