@@ -2,22 +2,20 @@
 
 namespace Florowebdevelopment\VatValidator;
 
-use Florowebdevelopment\VatValidator\Vies\Client;
-
 class VatValidator
 {
     /**
-     * @var array $aMetaData
+     * @var array
      */
     protected $aMetaData = [];
 
     /**
-     * @var bool $bValid
+     * @var bool
      */
     protected $bValid = false;
 
     /**
-     * @var bool $bStrict
+     * @var bool
      */
     protected $bStrict = true;
 
@@ -106,21 +104,24 @@ class VatValidator
 
         if (!preg_match($sPattern, $sVatNumber)) {
             $this->setValid(false);
+
             return false;
         }
 
         if (!self::check($sVatNumber)) {
             $this->setValid(false);
+
             return false;
         }
 
-        $oVies = new Vies;
+        $oVies = new Vies();
 
         $bStrict = $this->getStrict();
         $oVies->setStrict($bStrict);
 
         if (!$oVies->validate($sVatNumber)) {
             $this->setValid(false);
+
             return false;
         }
 

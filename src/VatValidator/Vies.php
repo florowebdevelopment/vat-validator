@@ -10,27 +10,27 @@ use stdClass;
 class Vies
 {
     /**
-     * @var ViesClient $oViesClient
+     * @var ViesClient
      */
     protected $oViesClient = null;
 
     /**
-     * @var bool $bValid
+     * @var bool
      */
     protected $bValid = false;
 
     /**
-     * @var bool $bStrict
+     * @var bool
      */
     protected $bStrict = true;
 
     /**
-     * @var string $sName
+     * @var string
      */
     protected $sName = '';
 
     /**
-     * @var string $sAddress
+     * @var string
      */
     protected $sAddress = '';
 
@@ -192,11 +192,12 @@ class Vies
 
             $oResponse = $oViesClient->checkVat([
                 'countryCode' => substr($sVatNumber, 0, 2),
-                'vatNumber' => substr($sVatNumber, 2, strlen($sVatNumber) - 2),
+                'vatNumber'   => substr($sVatNumber, 2, strlen($sVatNumber) - 2),
             ]);
 
             if (!$oResponse->valid) {
                 $this->setValid(false);
+
                 return false;
             }
 
@@ -208,10 +209,12 @@ class Vies
         } catch (ViesTimeoutException $e) {
             if ($this->getStrict() == false) {
                 $this->setValid(true);
+
                 return true;
             }
 
             $this->setValid(false);
+
             return false;
         } catch (SoapFault $e) {
             throw new SoapFault($e);
