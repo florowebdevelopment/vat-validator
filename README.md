@@ -36,7 +36,7 @@ if ($oVatValidator->isValid()) {
 }
 ```
 
-# Strict (optional)
+## Strict (optional)
 
 When strict is set to FALSE, the VAT number validation returns TRUE if the VIES service is not available (CURL timeout).
 
