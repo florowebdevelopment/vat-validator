@@ -2,6 +2,7 @@
 
 namespace Florowebdevelopment\VatValidator;
 
+use Exception;
 use Florowebdevelopment\VatValidator\Vies\Client as ViesClient;
 use Florowebdevelopment\VatValidator\Vies\Exceptions\Timeout as ViesTimeoutException;
 use SoapFault;
@@ -217,7 +218,13 @@ class Vies
 
             return false;
         } catch (SoapFault $e) {
-            throw new SoapFault($e);
+            if ($this->getStrict() == false) {
+                $this->setValid(true);
+
+                return true;
+            }
+
+            throw new Exception($e->getMessage(), $e->getCode());
         }
     }
 
