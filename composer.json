@@ -16,5 +16,11 @@
         "psr-4": {
             "Florowebdevelopment\\VatValidator\\": "src/"
         }
+    },
+    "extra": {
+        "deprecation": {
+            "message": "This package is deprecated and will not be maintained.",
+            "since": "3.0"
+        }
     }
 }
