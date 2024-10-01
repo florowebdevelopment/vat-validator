@@ -1,3 +1,6 @@
+# Deprecated
+This package is deprecated and will not be maintained.
+
 # VAT Validator
 
 <a href="https://packagist.org/packages/florowebdevelopment/vat-validator"><img src="https://poser.pugx.org/florowebdevelopment/vat-validator/d/total.svg" alt="Total Downloads"></a>
